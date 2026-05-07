@@ -1,0 +1,88 @@
+{
+"name": "MCP Working Server",
+"nodes": [
+{
+"parameters": {
+"path": "mcp",
+"httpMethod": "POST",
+"responseMode": "lastNode"
+},
+"id": "Webhook",
+"name": "Webhook",
+"type": "n8n-nodes-base.webhook",
+"typeVersion": 1,
+"position": [200, 300]
+},
+{
+"parameters": {
+"value1": "={{$json.body.tool}}",
+"rules": [
+{
+"operation": "equal",
+"value2": "tell_joke"
+},
+{
+"operation": "equal",
+"value2": "genz_word"
+}
+]
+},
+"id": "Switch",
+"name": "Switch Tool",
+"type": "n8n-nodes-base.switch",
+"typeVersion": 1,
+"position": [400, 300]
+},
+{
+"parameters": {
+"functionCode": "const jokes = [\n  "Why don't programmers like nature? Too many bugs.",\n  "Why did the developer go broke? Because he used up all his cache.",\n  "I told my computer I needed a break, and it froze."\n];\n\nconst random = jokes[Math.floor(Math.random() * jokes.length)];\nreturn [{ result: random }];"
+},
+"id": "Joke",
+"name": "Tell Joke",
+"type": "n8n-nodes-base.function",
+"typeVersion": 1,
+"position": [600, 200]
+},
+{
+"parameters": {
+"functionCode": "const words = [\n  { word: "rizz", meaning: "charisma or charm" },\n  { word: "sus", meaning: "suspicious" },\n  { word: "mid", meaning: "average or mediocre" },\n  { word: "bet", meaning: "okay / agreed" },\n  { word: "no cap", meaning: "no lie / for real" }\n];\n\nconst random = words[Math.floor(Math.random() * words.length)];\nreturn [{ result: random }];"
+},
+"id": "GenZ",
+"name": "GenZ Word",
+"type": "n8n-nodes-base.function",
+"typeVersion": 1,
+"position": [600, 400]
+}
+],
+"connections": {
+"Webhook": {
+"main": [
+[
+{
+"node": "Switch Tool",
+"type": "main",
+"index": 0
+}
+]
+]
+},
+"Switch Tool": {
+"main": [
+[
+{
+"node": "Tell Joke",
+"type": "main",
+"index": 0
+}
+],
+[
+{
+"node": "GenZ Word",
+"type": "main",
+"index": 0
+}
+]
+]
+}
+}
+}
